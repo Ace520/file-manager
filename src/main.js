@@ -5,7 +5,6 @@ import router from './router'
 import './assets/css/tailwind.css'
 import { Octokit } from "@octokit/rest";
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue';
-import 'overlayscrollbars/css/OverlayScrollbars.css';
 Vue.config.productionTip = false
 Vue.component('overlay-scrollbars', OverlayScrollbarsComponent);
 
