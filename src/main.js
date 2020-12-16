@@ -8,8 +8,10 @@ import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue';
 Vue.config.productionTip = false
 Vue.component('overlay-scrollbars', OverlayScrollbarsComponent);
 
-Vue.prototype.owner = 'Ace520'
 Vue.use(Vuex)
+
+Vue.prototype.owner = 'Ace520'
+
 const store = new Vuex.Store({
   state: {
     repo: '',
