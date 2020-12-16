@@ -8,7 +8,7 @@
   <link rel="icon" href="<%= BASE_URL %>favicon.ico">
   <title><%= htmlWebpackPlugin.options.title %></title>
   <!-- 使用CDN的CSS文件 -->
-  <link rel="stylesheet" href="https://unpkg.com/browse/overlayscrollbars@1.13.0/css/OverlayScrollbars.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/overlayscrollbars@1.13.0/css/OverlayScrollbars.min.css" />
   <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.css) { %>
   <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" />
   <% } %>
