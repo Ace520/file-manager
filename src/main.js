@@ -3,13 +3,10 @@ import App from './App.vue'
 import Vuex from 'vuex'
 import router from './router'
 import './assets/css/tailwind.css'
-import VueClipboard from 'vue-clipboard2'
 import { Octokit } from "@octokit/rest";
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue';
 import 'overlayscrollbars/css/OverlayScrollbars.css';
 Vue.config.productionTip = false
-VueClipboard.config.autoSetContainer = true
-Vue.use(VueClipboard)
 Vue.component('overlay-scrollbars', OverlayScrollbarsComponent);
 
 Vue.prototype.owner = 'Ace520'
