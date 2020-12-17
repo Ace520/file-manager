@@ -16,11 +16,18 @@ export default {
       let code = this.getQueryVariable("code");
       if (code) {
         this.octokit
-          .request("POST https://github.com/login/oauth/access_toke", {
-            client_id: ClientID,
-            client_secret: ClientSecrets,
-            code: code,
-          })
+          .request(
+            "POST https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token",
+            {
+              headers: {
+                origin: "x-requested-with",
+                Accept: "application/json"
+              },
+              client_id: ClientID,
+              client_secret: ClientSecrets,
+              code: code,
+            }
+          )
           .then((res) => {
             localStorage.setItem("token", res.data.access_token);
             this.$router.go(0);

@@ -8,8 +8,8 @@ module.exports = {
                 vue: "Vue",
                 Vuex: 'Vuex',
                 "vue-router": "VueRouter",
-                "overlayscrollbars": 'overlayscrollbars',
-                "overlayscrollbars-vue": 'overlayscrollbars-vue'
+                "overlayscrollbars": 'Overlayscrollbars',
+                "overlayscrollbars-vue": 'OverlayScrollbarsVue'
             };
         }
     },
