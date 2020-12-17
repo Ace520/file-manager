@@ -10,7 +10,7 @@ export default {
   components: {},
   mounted() {
     let ClientID = "272c05f414538177d1ad";
-    let ClientSecrets = "901874b1509a97105ac6bd6be422057aecf4ce0f";
+    let ClientSecrets = "52fa343de91d32c6177a2a1aac1ba9b45a8e3c68";
     let token = localStorage.getItem("token");
     if (!token) {
       let code = this.getQueryVariable("code");
@@ -21,7 +21,7 @@ export default {
             {
               headers: {
                 origin: "x-requested-with",
-                Accept: "application/json"
+                Accept: "application/json",
               },
               client_id: ClientID,
               client_secret: ClientSecrets,
@@ -34,7 +34,9 @@ export default {
           });
       } else {
         window.location.href =
-          "https://github.com/login/oauth/authorize?client_id=" + ClientID;
+          "https://github.com/login/oauth/authorize?client_id=" +
+          ClientID +
+          "&scope=repo";
       }
     }
   },
@@ -61,9 +63,38 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
-button {
+button,
+input {
   outline: none !important;
 }
+.btn {
+  outline: none;
+  background: #fff;
+  border: 0;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 2px 4px 8px #f0eeee;
+  font-weight: 600;
+  border-radius: 3px;
+  min-width: 90px;
+}
+.btn-blue {
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(32, 160, 255, 0.3);
+  background: #4db3ff;
+}
+.btn-green {
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(80, 201, 186, 0.3);
+  background: #50c9ba;
+}
+.btn-red {
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(242, 19, 104, 0.3);
+  background: #f21368;
+}
+
 .link:hover {
   text-decoration: underline;
   color: #667eea;

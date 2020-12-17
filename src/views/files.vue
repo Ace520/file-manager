@@ -17,7 +17,17 @@
           </div>
         </div>
       </div>
-      <div></div>
+      <div>
+        <button @click="getContents" class="btn mr-2">
+          刷新
+        </button>
+        <button @click="clickUpload" class="btn btn-green mr-2">
+          上传文件
+        </button>
+        <button @click="clickFile({})" class="btn btn-red mr-2">
+          新建文件
+        </button>
+      </div>
     </div>
 
     <overlay-scrollbars class="flex-1">
@@ -60,20 +70,23 @@
     </overlay-scrollbars>
 
     <editor :show="showEdit" :item="item"></editor>
+    <upload :show="showUpload"></upload>
   </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
 import Editor from "./editor.vue";
+import Upload from "./upload.vue";
 export default {
   name: "files",
-  components: { Editor },
+  components: { Editor, Upload },
   data: () => ({
     dirs: [],
     files: [],
     error: "",
-    showEdit: false,
     item: {},
+    showEdit: false,
+    showUpload: false,
   }),
   watch: {
     $route() {
@@ -84,6 +97,9 @@ export default {
     this.getContents();
   },
   methods: {
+    clickUpload() {
+      this.showUpload = !this.showUpload;
+    },
     clickFile(item) {
       this.item = item;
       this.showEdit = !this.showEdit;

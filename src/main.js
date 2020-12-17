@@ -2,9 +2,13 @@ import Vue from 'vue'
 import App from './App.vue'
 import Vuex from 'vuex'
 import router from './router'
+import store from './store'
 import './assets/css/tailwind.css'
 import { Octokit } from "@octokit/rest";
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue';
+import VModal from 'vue-js-modal'
+Vue.use(VModal)
+
 Vue.config.productionTip = false
 Vue.component('overlay-scrollbars', OverlayScrollbarsComponent);
 
@@ -12,41 +16,9 @@ Vue.use(Vuex)
 
 Vue.prototype.owner = 'Ace520'
 
-const store = new Vuex.Store({
-  state: {
-    repo: '',
-    path: '',
-  },
-  getters: {
-    repo: (state) => {
-      return state.repo
-    },
-    path: (state) => {
-      return state.path
-    }
-  },
-  mutations: {
-    repo(state, val) {
-      state.repo = val
-    },
-    path(state, val) {
-      state.path = val
-    }
-  },
-  actions: {
-    repo({ commit }, val) {
-      commit("repo", val)
-    },
-    path({ commit }, val) {
-      commit("path", val)
-    }
-  }
-})
-
 Vue.prototype.octokit = new Octokit({
   auth: localStorage.getItem('token'),
 });
-
 
 router.beforeEach((to, from, next) => {
   let repo = to.params.repo;
