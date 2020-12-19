@@ -4,7 +4,11 @@
       class="h-12 flex-none flex items-center justify-between text-lg font-blod pl-2 border-b shadow"
     >
       <div class="flex items-center text-indigo-500 pr-3 pl-1">
-        <img class="h-4 mr-2" src="../assets/icon/repo.png" />
+        <a-icon
+          type="home"
+          class="mr-2 text-sm text-gray-600"
+          style="margin-bottom: 0.15rem"
+        />
         <a-breadcrumb>
           <a-breadcrumb-item>
             <router-link class="link" :to="'/' + repo">
@@ -18,20 +22,32 @@
           </a-breadcrumb-item>
         </a-breadcrumb>
       </div>
-      <div>
-        <a-button class="mr-2" @click="getContents">刷新</a-button>
-        <a-button type="primary" class="mr-2" @click="showUpload = !showUpload">
+      <div class="flex items-center">
+        <a-button
+          type="primary"
+          shape="circle"
+          @click="getContents"
+          icon="sync"
+          class="mr-3 flex items-center justify-center"
+          size="small"
+          ghost
+        />
+        <a-button
+          type="primary"
+          class="mr-3"
+          @click="showUpload = !showUpload"
+          ghost
+        >
           上传文件
         </a-button>
-        <a-button type="danger" class="mr-2" @click="clickFile({})">
+        <a-button type="danger" class="mr-3" @click="clickFile({})" ghost>
           新建文件
         </a-button>
         <a-dropdown>
-          <a-avatar
-            class="shadow mr-2"
-            @click="(e) => e.preventDefault()"
-            src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-          />
+          <div @click="(e) => e.preventDefault()" class="mr-3">
+            <a-avatar class="shadow" :src="avatar_url" />
+            <a-icon type="caret-down" class="text-xs ml-1" />
+          </div>
           <a-menu slot="overlay">
             <a-menu-item>
               <a :href="'https://github.com/' + owner" target="_blank">
@@ -50,13 +66,18 @@
       <a-list item-layout="horizontal" :data-source="list">
         <a-list-item slot="renderItem" slot-scope="item" style="height: 45px">
           <div v-if="item.type === 'dir'" class="flex items-center px-3">
-            <img class="h-4 mr-2" src="../assets/icon/dir.png" />
+            <a-icon
+              type="folder"
+              class="mr-2"
+              style="color: #79b8ff"
+              theme="filled"
+            />
             <router-link class="link" :to="'/' + repo + '/' + item.path">
               {{ item.name }}
             </router-link>
           </div>
           <div v-else class="flex items-center px-3">
-            <img class="h-4 mr-2" src="../assets/icon/file.png" />
+            <a-icon type="file" class="mr-2 text-gray-600" />
             <div class="link" @click="clickFile(item)">{{ item.name }}</div>
           </div>
           <div
@@ -183,7 +204,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["owner"]),
+    ...mapGetters(["owner", "avatar_url"]),
     paths() {
       let arr = this.path ? this.path.split("/") : [];
       let newArr = [];

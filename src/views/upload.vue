@@ -42,7 +42,7 @@ export default {
   }),
   watch: {
     show: function () {
-      this.newFilePath = this.item.dir + "/";
+      this.newFilePath = this.item.dir ? this.item.dir + "/" : this.item.dir;
       this.visible = true;
     },
   },

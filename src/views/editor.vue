@@ -41,7 +41,7 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-import Base64 from "js-base64";
+import { Base64 } from "js-base64";
 export default {
   name: "editor",
   props: ["item", "show"],
@@ -58,6 +58,10 @@ export default {
     show: function () {
       this.spinning = true;
       this.visible = true;
+      this.confirmLoading = false;
+      if (this.$refs.aceEditor !== undefined) {
+        this.init();
+      }
     },
   },
   mounted() {
@@ -65,7 +69,6 @@ export default {
       "message",
       (event) => {
         let data = event.data;
-        console.log(data);
         switch (data.method) {
           case "change":
             this.content = data.content;
@@ -74,12 +77,7 @@ export default {
             this.spinning = false;
             break;
           case "onload":
-            this.newItem = this.item;
-            this.newFilePath =
-              this.newItem.path != undefined
-                ? this.newItem.path
-                : this.newItem.dir + "/";
-            this.getContent();
+            this.init();
             break;
         }
       },
@@ -87,6 +85,17 @@ export default {
     );
   },
   methods: {
+    init() {
+      this.newItem = this.item;
+      if (this.newItem.path != undefined) {
+        this.newFilePath = this.newItem.path;
+      } else if (this.newItem.dir) {
+        this.newFilePath = this.newItem.dir + "/";
+      } else {
+        this.newFilePath = "";
+      }
+      this.getContent();
+    },
     handleOk() {
       this.confirmLoading = true;
       this.octokit
@@ -98,7 +107,12 @@ export default {
           content: Base64.encode(this.content),
           sha: this.newItem && this.newItem.sha ? this.newItem.sha : "",
         })
-        .then(() => {
+        .then((res) => {
+          if (res.data.error) {
+            this.$message.error(res.data.error);
+            return false;
+          }
+          this.$message.success("上传成功");
           this.visible = false;
           this.confirmLoading = false;
         });

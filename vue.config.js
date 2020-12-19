@@ -33,6 +33,7 @@ module.exports = {
         } : {};
         config.plugin("html").tap(args => {
             args[0].cdn = cdn;
+            args[0].title = "GH文件管理器";
             return args;
         });
         // 修复HMR
