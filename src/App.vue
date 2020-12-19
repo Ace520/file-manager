@@ -26,7 +26,7 @@ input:focus,
 textarea:focus {
   outline: none;
 }
-.ant-input:hover,.ant-input:focus{
+.modal-body-p-0 .ant-input:hover,.modal-body-p-0 .ant-input:focus{
   border:none!important;
   box-shadow:none!important;
 }

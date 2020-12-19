@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './assets/css/tailwind.css'
-import Antd from 'ant-design-vue';
+import antd from 'ant-design-vue';
 import VueLazyload from 'vue-lazyload'
 import { Octokit } from "@octokit/rest";
 import Cookies from "js-cookie";
@@ -15,7 +15,7 @@ Vue.prototype.octokit = new Octokit({
   auth: Cookies.get("token"),
 });
 Vue.component('overlay-scrollbars', OverlayScrollbarsComponent);
-Vue.use(Antd);
+Vue.use(antd);
 Vue.use(VueLazyload, {
   preLoad: 1.3,
   attempt: 1

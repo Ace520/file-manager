@@ -10,7 +10,9 @@ module.exports = {
                 "vue-router": "VueRouter",
                 "overlayscrollbars": 'Overlayscrollbars',
                 "overlayscrollbars-vue": 'OverlayScrollbarsVue',
-                'ant-design-vue': 'Ant',
+                'ant-design-vue': 'antd',
+                "js-cookie": "js-cookie",
+                "js-base64": "js-base64"
             };
         }
     },
@@ -25,7 +27,9 @@ module.exports = {
                 "https://unpkg.com/vuex",
                 "https://unpkg.com/overlayscrollbars@1.13.0/js/OverlayScrollbars.min.js",
                 "https://unpkg.com/overlayscrollbars-vue@0.2.2/dist/overlayscrollbars-vue.js",
-                "https://unpkg.com/ant-design-vue@1.7.2/dist/antd.min.js"
+                "https://unpkg.com/ant-design-vue@1.7.2/dist/antd.min.js",
+                "https://unpkg.com/js-cookie@2.2.1/src/js.cookie.js",
+                "https://unpkg.com/js-base64@3.6.0/base64.js"
             ]
         } : {};
         config.plugin("html").tap(args => {
