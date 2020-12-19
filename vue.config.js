@@ -11,7 +11,7 @@ module.exports = {
                 "overlayscrollbars-vue": 'OverlayScrollbarsVue',
                 'ant-design-vue': 'antd',
                 "js-cookie": "Cookies",
-                "js-base64": "js-base64"
+                "js-base64": "Base64"
             };
         }
     },

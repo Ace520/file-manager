@@ -41,7 +41,7 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-import { encode, decode } from "js-base64";
+import Base64 from "js-base64";
 export default {
   name: "editor",
   props: ["item", "show"],
@@ -95,7 +95,7 @@ export default {
           repo: this.newItem.repo,
           path: this.newFilePath,
           message: "put content",
-          content: encode(this.content),
+          content: Base64.encode(this.content),
           sha: this.newItem && this.newItem.sha ? this.newItem.sha : "",
         })
         .then(() => {
@@ -115,7 +115,7 @@ export default {
             path: this.newItem.path,
           })
           .then((res) => {
-            let text = decode(res.data.content);
+            let text = Base64.decode(res.data.content);
             this.setContent(text);
           });
       } else {
