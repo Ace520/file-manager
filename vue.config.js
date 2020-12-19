@@ -9,7 +9,8 @@ module.exports = {
                 Vuex: 'Vuex',
                 "vue-router": "VueRouter",
                 "overlayscrollbars": 'Overlayscrollbars',
-                "overlayscrollbars-vue": 'OverlayScrollbarsVue'
+                "overlayscrollbars-vue": 'OverlayScrollbarsVue',
+                'ant-design-vue': 'Ant',
             };
         }
     },
@@ -23,16 +24,14 @@ module.exports = {
                 "https://unpkg.com/vue-router/dist/vue-router.min.js",
                 "https://unpkg.com/vuex",
                 "https://unpkg.com/overlayscrollbars@1.13.0/js/OverlayScrollbars.min.js",
-                "https://unpkg.com/overlayscrollbars-vue@0.2.2/dist/overlayscrollbars-vue.js"
+                "https://unpkg.com/overlayscrollbars-vue@0.2.2/dist/overlayscrollbars-vue.js",
+                "https://unpkg.com/ant-design-vue@1.7.2/dist/antd.min.js"
             ]
         } : {};
         config.plugin("html").tap(args => {
             args[0].cdn = cdn;
             return args;
         });
-        config
-            .plugin('webpack-bundle-analyzer')
-            .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
         // 修复HMR
         config.resolve.symlinks(true);
     }

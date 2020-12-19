@@ -1,46 +1,42 @@
 <template>
   <div>
-    <modal
-      name="iframe-modal"
-      width="750px"
-      height="auto"
-      :adaptive="true"
-      :clickToClose="false"
+    <a-modal
+      title="编辑"
+      :visible="visible"
+      :confirm-loading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancel"
+      okText="提交"
+      cancelText="取消"
+      :centered="true"
+      :maskClosable="false"
+      :keyboard="false"
+      :width="800"
+      class="modal-body-p-0"
     >
-      <div
-        class="bg-white flex flex-col rounded shadow-lg"
-        style="height: 90vh"
-      >
-        <iframe
-          class="flex-1 border-b rounded"
-          ref="aceEditor"
-          src="https://ace520.github.io/ace"
-          frameborder="no"
-          border="0"
-          marginwidth="0"
-          marginheight="0"
-          scrolling="no"
-          allowtransparency="yes"
-          @load="loading"
-        ></iframe>
-        <div class="h-12 flex-none flex items-center justify-between px-2">
-          <div class="text-sm text-gray-600">/{{ item.path }}</div>
-          <div>
-            <button @click="hideModal" class="mr-2 btn">取消</button>
-            <button @click="onSubmit" class="btn btn-blue">保存</button>
-          </div>
-        </div>
-      </div>
-    </modal>
-    <modal name="add-file-modal" width="450px" height="auto">
-      <div class="border-b px-3 py-2">文件名</div>
-      <div class="py-5 px-3">
-        <input class="border w-full rounded py-1 px-2" v-model="newFilePath" />
-      </div>
-      <div class="border-t p-3 text-right">
-        <button @click="addFile" class="btn btn-blue">确定</button>
-      </div>
-    </modal>
+      <a-spin :spinning="spinning">
+        <div style="height: 75vh" class="flex flex-col">
+          <a-input
+            placeholder="地址"
+            v-model="newFilePath"
+            class="border-none px-6 my-1"
+          />
+          <iframe
+            class="flex-1 w-full"
+            ref="aceEditor"
+            :src="
+              'https://ace520.github.io/ace?theme=twilight&fontSize=15&mode=' +
+              mode
+            "
+            frameborder="no"
+            border="0"
+            marginwidth="0"
+            marginheight="0"
+            scrolling="no"
+            allowtransparency="yes"
+          ></iframe></div
+      ></a-spin>
+    </a-modal>
   </div>
 </template>
 <script>
@@ -50,19 +46,18 @@ export default {
   name: "editor",
   props: ["item", "show"],
   data: () => ({
+    visible: false,
+    confirmLoading: false,
     content: "",
     newFilePath: "",
     newItem: {},
+    mode: "",
+    spinning: false,
   }),
   watch: {
     show: function () {
-      this.newItem = this.item;
-      if (this.newItem && this.newItem.path) {
-        this.$modal.show("iframe-modal");
-      } else {
-        this.newFilePath = this.path ? this.path + "/" : "";
-        this.$modal.show("add-file-modal");
-      }
+      this.spinning = true;
+      this.visible = true;
     },
   },
   mounted() {
@@ -70,9 +65,21 @@ export default {
       "message",
       (event) => {
         let data = event.data;
+        console.log(data);
         switch (data.method) {
           case "change":
             this.content = data.content;
+            break;
+          case "setValue":
+            this.spinning = false;
+            break;
+          case "onload":
+            this.newItem = this.item;
+            this.newFilePath =
+              this.newItem.path != undefined
+                ? this.newItem.path
+                : this.newItem.dir + "/";
+            this.getContent();
             break;
         }
       },
@@ -80,56 +87,53 @@ export default {
     );
   },
   methods: {
-    addFile() {
-      if (!this.newFilePath) {
-        return false;
-      }
-      this.newItem = {
-        path: this.newFilePath,
-      };
-      this.$modal.hide("add-file-modal");
-      this.$modal.show("iframe-modal");
-    },
-    onSubmit() {
+    handleOk() {
+      this.confirmLoading = true;
       this.octokit
         .request("PUT /repos/{owner}/{repo}/contents/{path}", {
           owner: this.owner,
-          repo: this.repo,
-          path: this.newItem.path,
+          repo: this.newItem.repo,
+          path: this.newFilePath,
           message: "put content",
           content: encode(this.content),
           sha: this.newItem && this.newItem.sha ? this.newItem.sha : "",
         })
         .then(() => {
-          this.hideModal();
+          this.visible = false;
+          this.confirmLoading = false;
         });
     },
-    loading() {
+    handleCancel() {
+      this.visible = false;
+    },
+    getContent() {
       if (this.newItem && this.newItem.name) {
         this.octokit
           .request("GET /repos/{owner}/{repo}/contents/{path}", {
             owner: this.owner,
-            repo: this.repo,
+            repo: this.newItem.repo,
             path: this.newItem.path,
           })
           .then((res) => {
             let text = decode(res.data.content);
-            this.$refs.aceEditor.contentWindow.postMessage(
-              {
-                method: "setValue",
-                content: text,
-              },
-              "*"
-            );
+            this.setContent(text);
           });
+      } else {
+        this.setContent("");
       }
     },
-    hideModal() {
-      this.$modal.hide("iframe-modal");
+    setContent(text) {
+      this.$refs.aceEditor.contentWindow.postMessage(
+        {
+          method: "setValue",
+          content: text,
+        },
+        "*"
+      );
     },
   },
   computed: {
-    ...mapGetters(["repo", "path"]),
+    ...mapGetters(["owner"]),
   },
 };
 </script>

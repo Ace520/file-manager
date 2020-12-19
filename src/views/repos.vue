@@ -1,23 +1,24 @@
 <template>
   <overlay-scrollbars>
-    <div
-      v-for="(item, index) in list"
-      :key="index"
-      :to="'/' + item.name"
-      class="border-b"
-      :class="repo == item.name ? 'bg-gray-200' : ''"
-    >
-      <div class="py-1 w-full px-2">
-        <router-link :to="'/' + item.name">
-          <div class="text-lg my-2 truncate">
+    <div class="border-b p-3">
+      <a-input-search
+        v-model="keyword"
+        placeholder="input search repo"
+        @change="onSearch"
+      />
+    </div>
+    <a-list item-layout="horizontal" :data-source="list">
+      <a-list-item slot="renderItem" slot-scope="item">
+        <router-link :to="'/' + item.name" class="w-full px-3">
+          <div class="text-lg truncate">
             {{ item.name }}
           </div>
-          <div class="text-sm text-gray-500">
-            {{ item.updated_at }}
+          <div class="text-xs text-gray-600 truncate h-5 mt-1">
+            {{ item.description }}
           </div>
         </router-link>
-      </div>
-    </div>
+      </a-list-item>
+    </a-list>
   </overlay-scrollbars>
 </template>
 <script>
@@ -25,11 +26,16 @@ import { mapGetters } from "vuex";
 export default {
   data: () => ({
     list: [],
+    all: [],
+    keyword: "",
   }),
   mounted() {
     this.getRepos();
   },
   methods: {
+    onSearch() {
+      this.list = this.searchArr(this.all, this.keyword, "name");
+    },
     getRepos() {
       this.octokit
         .request("GET /users/{username}/repos", {
@@ -37,11 +43,22 @@ export default {
         })
         .then((res) => {
           this.list = res.data;
+          this.all = this.list;
         });
+    },
+    searchArr(list, keyWord, key) {
+      var reg = new RegExp(keyWord);
+      var arr = [];
+      for (var i = 0; i < list.length; i++) {
+        if (reg.test(list[i][key])) {
+          arr.push(list[i]);
+        }
+      }
+      return arr;
     },
   },
   computed: {
-    ...mapGetters(["repo"]),
+    ...mapGetters(["repo", "owner"]),
   },
 };
 </script>

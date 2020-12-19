@@ -1,13 +1,21 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+import Cookies from 'js-cookie'
 Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
+        owner: '',
+        avatar_url:'',
         repo: '',
-        path: ''
+        path: '',
     },
     getters: {
+        owner: () => {
+            return Cookies.get('owner');
+        },
+        avatar_url: () => {
+            return Cookies.get('avatar_url');
+        },
         repo: (state) => {
             return state.repo
         },

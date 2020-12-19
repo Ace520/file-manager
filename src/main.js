@@ -1,36 +1,27 @@
 import Vue from 'vue'
 import App from './App.vue'
-import Vuex from 'vuex'
 import router from './router'
 import store from './store'
 import './assets/css/tailwind.css'
+import Antd from 'ant-design-vue';
+import VueLazyload from 'vue-lazyload'
 import { Octokit } from "@octokit/rest";
+import Cookies from "js-cookie";
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-vue';
-import VModal from 'vue-js-modal'
-Vue.use(VModal)
 
 Vue.config.productionTip = false
-Vue.component('overlay-scrollbars', OverlayScrollbarsComponent);
-
-Vue.use(Vuex)
-
-Vue.prototype.owner = 'Ace520'
 
 Vue.prototype.octokit = new Octokit({
-  auth: localStorage.getItem('token'),
+  auth: Cookies.get("token"),
 });
-
-router.beforeEach((to, from, next) => {
-  let repo = to.params.repo;
-  let path = to.params.pathMatch;
-  if (repo == undefined) {
-    repo = path;
-    path = "";
-  }
-  store.commit('repo', repo)
-  store.commit('path', path)
-  next()
+Vue.component('overlay-scrollbars', OverlayScrollbarsComponent);
+Vue.use(Antd);
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  attempt: 1
 })
+
+
 new Vue({
   router,
   store,

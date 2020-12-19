@@ -7,52 +7,6 @@
 <script>
 export default {
   name: "App",
-  components: {},
-  mounted() {
-    let ClientID = "272c05f414538177d1ad";
-    let ClientSecrets = "52fa343de91d32c6177a2a1aac1ba9b45a8e3c68";
-    let token = localStorage.getItem("token");
-    if (!token) {
-      let code = this.getQueryVariable("code");
-      if (code) {
-        this.octokit
-          .request(
-            "POST https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token",
-            {
-              headers: {
-                origin: "x-requested-with",
-                Accept: "application/json",
-              },
-              client_id: ClientID,
-              client_secret: ClientSecrets,
-              code: code,
-            }
-          )
-          .then((res) => {
-            localStorage.setItem("token", res.data.access_token);
-            this.$router.go(0);
-          });
-      } else {
-        window.location.href =
-          "https://github.com/login/oauth/authorize?client_id=" +
-          ClientID +
-          "&scope=repo";
-      }
-    }
-  },
-  methods: {
-    getQueryVariable(variable) {
-      var query = window.location.search.substring(1);
-      var vars = query.split("&");
-      for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split("=");
-        if (pair[0] == variable) {
-          return pair[1];
-        }
-      }
-      return false;
-    },
-  },
 };
 </script>
 
@@ -64,41 +18,36 @@ export default {
   color: #2c3e50;
 }
 button,
-input {
+input,
+span {
   outline: none !important;
 }
-.btn {
+input:focus,
+textarea:focus {
   outline: none;
-  background: #fff;
-  border: 0;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-size: 14px;
-  box-shadow: 2px 4px 8px #f0eeee;
-  font-weight: 600;
-  border-radius: 3px;
-  min-width: 90px;
 }
-.btn-blue {
-  color: #fff;
-  box-shadow: 0 4px 8px rgba(32, 160, 255, 0.3);
-  background: #4db3ff;
+.ant-input:hover,.ant-input:focus{
+  border:none!important;
+  box-shadow:none!important;
 }
-.btn-green {
-  color: #fff;
-  box-shadow: 0 4px 8px rgba(80, 201, 186, 0.3);
-  background: #50c9ba;
+.ant-list-item-action {
+  display: none;
 }
-.btn-red {
-  color: #fff;
-  box-shadow: 0 4px 8px rgba(242, 19, 104, 0.3);
-  background: #f21368;
+.ant-list-item:hover {
+  background-color: #f3f0f0;
 }
-
+.ant-list-item:hover .ant-list-item-action {
+  display: block;
+}
+a {
+  color: #2c3e50 !important;
+}
 .link:hover {
   text-decoration: underline;
-  color: #667eea;
+  color: #1890ff !important;
   cursor: pointer;
 }
+.modal-body-p-0 .ant-modal-body {
+  padding: 0;
+}
 </style>
-

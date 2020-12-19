@@ -1,45 +1,49 @@
 <template>
   <div>
-    <modal name="upload-modal" width="450px" height="auto">
-      <div class="border-b px-3 py-2">上传文件</div>
-      <div class="py-5 px-3 flex">
-        <input
-          class="border w-full rounded-l py-1 px-2"
-          v-model="newFilePath"
-        />
-        <input
-          class="value"
-          style="display: none"
-          type="file"
-          ref="file"
-          @change="getFile($event)"
-        />
-        <button
-          @click="addFile"
-          class="w-24 bg-red-500 rounded-r text-white text-sm"
-        >
-          选择文件
-        </button>
-      </div>
-      <div class="border-t p-3 text-right">
-        <button @click="onSubmit" class="btn btn-blue">上传</button>
-      </div>
-    </modal>
+    <a-modal
+      title="上传文件"
+      :visible="visible"
+      :confirm-loading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancel"
+      okText="上传"
+      cancelText="取消"
+      :centered="true"
+      :maskClosable="false"
+      :keyboard="false"
+    >
+      <a-input-search
+        v-model="newFilePath"
+        placeholder="file path"
+        size="large"
+        @search="addFile"
+      >
+        <a-button slot="enterButton"> 选择文件 </a-button>
+      </a-input-search>
+      <input
+        style="display: none"
+        type="file"
+        ref="file"
+        @change="getFile($event)"
+      />
+    </a-modal>
   </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
 export default {
   name: "upload",
-  props: ["show"],
+  props: ["show", "item"],
   data: () => ({
-    content: "",
+    visible: false,
+    confirmLoading: false,
     newFilePath: "",
+    content: "",
   }),
   watch: {
     show: function () {
-      this.newFilePath = this.path ? this.path + "/" : "";
-      this.$modal.show("upload-modal");
+      this.newFilePath = this.item.dir + "/";
+      this.visible = true;
     },
   },
   mounted() {},
@@ -55,18 +59,28 @@ export default {
         that.content = base64File;
       });
     },
-    onSubmit() {
+    handleOk() {
+      this.confirmLoading = true;
       this.octokit
         .request("PUT /repos/{owner}/{repo}/contents/{path}", {
           owner: this.owner,
-          repo: this.repo,
+          repo: this.item.repo,
           path: this.newFilePath,
           message: "put content",
           content: this.content,
         })
-        .then(() => {
-          this.$modal.hide("upload-modal");
+        .then((res) => {
+          if (res.data.error) {
+            this.$message.error(res.data.error);
+            return false;
+          }
+          this.$message.success("上传成功");
+          this.visible = false;
+          this.confirmLoading = false;
         });
+    },
+    handleCancel() {
+      this.visible = false;
     },
     getFileBase64(file, fnc) {
       var reader = new FileReader();
@@ -79,7 +93,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["repo", "path"]),
+    ...mapGetters(["owner"]),
   },
 };
 </script>
