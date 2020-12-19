@@ -1,5 +1,4 @@
 const IS_PROD = ["production", "prod"].includes(process.env.NODE_ENV);
-
 module.exports = {
     publicPath: "/file-manager",
     configureWebpack: config => {
@@ -11,7 +10,7 @@ module.exports = {
                 "overlayscrollbars": 'Overlayscrollbars',
                 "overlayscrollbars-vue": 'OverlayScrollbarsVue',
                 'ant-design-vue': 'antd',
-                "js-cookie": "js-cookie",
+                "js-cookie": "Cookies",
                 "js-base64": "js-base64"
             };
         }

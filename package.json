@@ -5,9 +5,8 @@
   "homepage": "https://ace520.github.io/file-manager",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "gh": "gh-pages -d dist"
+    "build": "vue-cli-service build && fse copy dist/index.html dist/404.html && gh-pages -d dist",
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@octokit/rest": "^18.0.12",
