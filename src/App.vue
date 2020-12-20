@@ -26,10 +26,10 @@ input:focus,
 textarea:focus {
   outline: none;
 }
-.modal-body-p-0 .ant-input:hover,.modal-body-p-0 .ant-input:focus{
+/* .modal-body-p-0 .ant-input:hover,.modal-body-p-0 .ant-input:focus{
   border:none!important;
   box-shadow:none!important;
-}
+} */
 .ant-list-item-action {
   display: none;
 }
@@ -49,5 +49,12 @@ a {
 }
 .modal-body-p-0 .ant-modal-body {
   padding: 0;
+}
+.tool-modal .ant-modal-body,
+.tool-modal .ant-modal {
+  padding: 0;
+}
+.os-content {
+  height: 100% !important;
 }
 </style>
