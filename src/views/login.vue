@@ -67,8 +67,8 @@ export default {
   name: "App",
   components: {},
   data: () => ({
-    ClientID: "bfda7c34c2d1606d5a50",
-    ClientSecrets: "5cf585f36183c3bd977d4c1b9d79b52e845c4b37",
+    ClientID: "272c05f414538177d1ad",
+    ClientSecrets: "b84ded52f5b77a0b6774cdc9896b57047f73d2ba",
     spinning: false,
   }),
   mounted() {

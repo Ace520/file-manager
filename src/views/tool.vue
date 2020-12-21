@@ -56,13 +56,13 @@ export default {
       (event) => {
         let data = event.data;
         switch (data.method) {
-          case "change":
+          case "onChange":
             this.$emit("change", data.content);
             break;
-          case "setValue":
+          case "setContent":
             this.spinning = false;
             break;
-          case "onload":
+          case "onLoad":
             this.setContent();
             break;
         }
@@ -74,7 +74,7 @@ export default {
     setContent() {
       this.$refs.iframe.contentWindow.postMessage(
         {
-          method: "setValue",
+          method: "setContent",
           content: this.content,
         },
         "*"
